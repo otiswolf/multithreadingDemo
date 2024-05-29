@@ -3,16 +3,13 @@ package org.example;
 public class Stack {
     private int[] array;
     private int stackTop;
-    Object lock;
 
     public Stack(int capacity) {
         array = new int[capacity];
         stackTop = -1;
-        lock = new Object();
     }
 
-    public boolean push(int element) {
-        synchronized(lock) {
+    public synchronized boolean push(int element) {
             if (isFull()) return false;
             ++stackTop;
 
@@ -24,11 +21,9 @@ public class Stack {
             // If pop() is called by another thread before we reach this line in our thread
             array[stackTop] = element;
             return true;
-        }
     }
 
-    public int pop() {
-        synchronized(lock) {
+    public synchronized int pop() {
             if (isEmpty()) return Integer.MIN_VALUE;
             int obj = array[stackTop];
             array[stackTop] = Integer.MIN_VALUE;
@@ -39,7 +34,6 @@ public class Stack {
 
             stackTop --;
             return obj;
-        }
     }
 
     public boolean isEmpty() {
