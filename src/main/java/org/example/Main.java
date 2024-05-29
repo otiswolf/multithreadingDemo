@@ -10,7 +10,14 @@ public class Main {
 //        thread1.setDaemon(true);
         thread1.start();
 
-        Thread thread2 = new Thread(new Thread2(), "myThread2");
+//        Thread thread2 = new Thread(new Thread2(), "myThread2");
+
+        // An alternate way of implementing runnables
+        Thread thread2 = new Thread(() -> {
+            for (int i = 0; i < 5; i++) {
+                System.out.println("inside " + Thread.currentThread() + ": " + i);
+            }
+        }, "myThread2");
 
         thread2.start();
 
