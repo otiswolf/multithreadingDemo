@@ -10,6 +10,10 @@ public class Main {
 //        thread1.setDaemon(true);
         thread1.start();
 
+        Thread thread2 = new Thread(new Thread2(), "myThread2");
+
+        thread2.start();
+
         System.out.println("main() is exiting");
     }
 }
