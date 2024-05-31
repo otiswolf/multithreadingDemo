@@ -20,22 +20,39 @@ public class Main {
 //        }, "myThread2");
 //
 //        thread2.start();
+//
+//        Stack stack = new Stack(5);
+//
+//        new Thread(() -> {
+//            int counter = 0;
+//            while(++ counter < 10) {
+//                System.out.println("Pushed: " + stack.push(100));
+//            }
+//        }, "Pusher").start();
+//
+//        new Thread(() -> {
+//            int counter = 0;
+//            while(++ counter < 10) {
+//                System.out.println("Popped: " + stack.pop());
+//            }
+//        }, "Popper").start();
 
-        Stack stack = new Stack(5);
-
-        new Thread(() -> {
-            int counter = 0;
-            while(++ counter < 10) {
-                System.out.println("Pushed: " + stack.push(100));
+        Thread thread3 = new Thread(() -> {
+            try {
+                Thread.sleep(1);
+                for (int i = 0; i < 5000; i++);
+            } catch (InterruptedException e) {
+                System.out.println(e);
             }
-        }, "Pusher").start();
+        }, "States");
 
-        new Thread(() -> {
-            int counter = 0;
-            while(++ counter < 10) {
-                System.out.println("Popped: " + stack.pop());
-            }
-        }, "Popper").start();
+        thread3.start();
+
+        while(true) {
+            Thread.State state = thread3.getState();
+            System.out.println(state);
+            if (state == Thread.State.TERMINATED) break;
+        }
 
         System.out.println("main() is exiting");
     }
