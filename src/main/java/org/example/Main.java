@@ -37,21 +37,34 @@ public class Main {
 //            }
 //        }, "Popper").start();
 
-        Thread thread3 = new Thread(() -> {
-            try {
-                Thread.sleep(1);
-                for (int i = 0; i < 5000; i++);
-            } catch (InterruptedException e) {
-                System.out.println(e);
-            }
-        }, "States");
+//        Thread thread3 = new Thread(() -> {
+//            try {
+//                Thread.sleep(1);
+//                for (int i = 0; i < 5000; i++);
+//            } catch (InterruptedException e) {
+//                System.out.println(e);
+//            }
+//        }, "States");
+//
+//        thread3.start();
+//
+//        while(true) {
+//            Thread.State state = thread3.getState();
+//            System.out.println(state);
+//            if (state == Thread.State.TERMINATED) break;
+//        }
 
-        thread3.start();
+        Thread thread4 = new Thread(() -> {
+            System.out.println(Thread.currentThread());
+        }, "Our Thread");
 
-        while(true) {
-            Thread.State state = thread3.getState();
-            System.out.println(state);
-            if (state == Thread.State.TERMINATED) break;
+        thread4.start();
+
+        try {
+            // Blocks main thread from continuing until thread4 completes
+            thread4.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         System.out.println("main() is exiting");
