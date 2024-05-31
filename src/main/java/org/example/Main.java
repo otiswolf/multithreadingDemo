@@ -53,19 +53,60 @@ public class Main {
 //            System.out.println(state);
 //            if (state == Thread.State.TERMINATED) break;
 //        }
+//
+//        Thread thread4 = new Thread(() -> {
+//            System.out.println(Thread.currentThread());
+//        }, "Our Thread");
+//
+//        thread4.start();
+//
+//        try {
+//            // Blocks main thread from continuing until thread4 completes
+//            thread4.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        thread4.setPriority(1);
+//        System.out.println(thread4.getPriority());
 
-        Thread thread4 = new Thread(() -> {
-            System.out.println(Thread.currentThread());
-        }, "Our Thread");
+        // Deadlock situation
 
-        thread4.start();
+        String lock1 = "lock1";
+        String lock2 = "lock2";
 
-        try {
-            // Blocks main thread from continuing until thread4 completes
-            thread4.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread thread1 = new Thread(() -> {
+            synchronized(lock1) {
+                try {
+                    Thread.sleep(1);
+                    synchronized (lock2) {
+                        System.out.println("lock 2 acquired");
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        }, "thread1");
+
+        Thread thread2 = new Thread(() -> {
+            // use lock1 here to avoid deadlock
+            synchronized(lock2) {
+                try {
+                    Thread.sleep(1);
+                    // use lock2 here to avoid deadlock
+                    synchronized (lock1) {
+                        System.out.println("lock 1 acquired");
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+        }, "thread2");
+
+        thread1.start();
+        thread2.start();
 
         System.out.println("main() is exiting");
     }
